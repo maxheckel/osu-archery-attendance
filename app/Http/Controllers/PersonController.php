@@ -31,6 +31,7 @@ class PersonController extends Controller
         $person = new Person();
         $person->name = $request->get('name');
         $person->save();
+        return $person;
     }
 
     /**
@@ -66,6 +67,10 @@ class PersonController extends Controller
     }
 
     public function search(Request $request){
-        return Person::whereRaw('UPPER(name) = ?', $request->get('name'))->get();
+        $exact = Person::whereRaw('UPPER(name) = ?', strtoupper($request->get('name')))->first();
+        if ($exact){
+            return [$exact];
+        }
+        return Person::whereRaw('UPPER(name) like ?', '%'.strtoupper($request->get('name').'%'))->get();
     }
 }

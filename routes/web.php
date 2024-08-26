@@ -9,7 +9,14 @@ Route::get('/', function () {
 });
 
 Route::get('attend', [\App\Http\Controllers\AttendanceController::class, 'attend'])->name('attend');
+
 Route::post('person/search', [\App\Http\Controllers\PersonController::class, 'search'])->name('person.search');
+Route::get('/success', function () {
+    return Inertia::render('Success');
+})->name('success');
+Route::resource('person', \App\Http\Controllers\PersonController::class);
+Route::resource('attendance', \App\Http\Controllers\AttendanceController::class);
+
 
 Route::middleware([
     'auth:sanctum',
@@ -20,6 +27,4 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::resource('attendance', \App\Http\Controllers\AttendanceController::class);
-    Route::resource('person', \App\Http\Controllers\PersonController::class);
 });

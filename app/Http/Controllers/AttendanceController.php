@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -37,6 +38,10 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
+        $today = Attendance::whereRaw('date(created_at) = ?', Carbon::today()->format('Y-m-d'))->where('person_id', $request->get('person_id'))->first();
+        if ($today){
+            return;
+        }
         $attendance = new Attendance();
         $attendance->person_id = $request->get('person_id');
         $attendance->save();
