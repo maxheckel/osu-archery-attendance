@@ -71,6 +71,6 @@ class PersonController extends Controller
         if ($exact){
             return [$exact];
         }
-        return Person::whereRaw('UPPER(name) like ?', '%'.strtoupper($request->get('name').'%'))->get();
+        return Person::whereRaw('UPPER(name) like ?', '%'.strtoupper($request->get('name').'%'))->orWhereRaw('UPPER(name) like ?', strtoupper($request->get('name').'%'))->orWhereRaw('UPPER(name) like ?', '%'.strtoupper($request->get('name')))->get();
     }
 }
